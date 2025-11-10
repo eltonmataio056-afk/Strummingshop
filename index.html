@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="pt">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>P&amp;M Digital — Passaporte Streaming</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet">
-<style>
+<html lang="pt"> 
+ <head> 
+  <meta charset="utf-8"> 
+  <meta name="viewport" content="width=device-width,initial-scale=1"> 
+  <title>P&amp;M Digital — Passaporte Streaming</title> 
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"> 
+  <style>
   :root{
     --accent:#e50914;
     --muted:#6b7280;
@@ -63,137 +63,148 @@
     .slide{flex-direction:column;align-items:flex-start}
     header .top{flex-direction:column;align-items:flex-start;gap:6px}
   }
-</style>
-</head>
-<body>
-  <div class="wrap">
-    <header>
-      <div class="top">
-        <div>
-          <h1>P&amp;M DIGITAL</h1>
-          <div class="lead">Seu passaporte para o melhor do streaming</div>
-        </div>
-        <div style="text-align:right">
-          <div class="muted">Pagamento (e-Mola): <span class="bold">867837056</span></div>
-          <div class="muted">WhatsApp: <span class="bold">821005252</span></div>
-        </div>
-      </div>
-    </header>
-
-    <!-- SLIDER -->
-    <section class="card" aria-label="Destaques">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <div class="bold">Destaques</div>
-        <div class="hint">Imagens reais. Clique em Ver plataformas ou Assinar.</div>
-      </div>
-
-      <div class="slider" id="slider" aria-hidden="false">
-        <div class="slides" id="slides"></div>
-      </div>
-
-      <div class="controls" id="dotsWrap" aria-hidden="false" style="margin-top:12px"></div>
-
-      <div style="display:flex;justify-content:center;gap:8px;margin-top:10px">
-        <button class="arrow" onclick="prevSlide()">◀</button>
-        <button class="arrow" onclick="nextSlide()">▶</button>
-      </div>
-    </section>
-
-    <!-- QUIZ -->
-    <section class="card quiz-card" style="margin-top:14px">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <div class="bold">Quiz Interactivo — 6 perguntas</div>
-        <div class="hint">Responda e veja a plataforma ideal</div>
-      </div>
-
-      <div id="quizArea" style="margin-top:12px"></div>
-      <div id="quizResult" style="margin-top:12px"></div>
-    </section>
-
-    <!-- TABLE -->
-    <section class="card" style="margin-top:14px">
-      <div class="bold">Planos &amp; Preços</div>
-      <div class="hint" style="margin-top:8px">Escolha e clique em <strong>Pagar</strong>. Escreva seu nome e confirme — abriremos o WhatsApp.</div>
-
-      <div style="margin-top:12px;overflow:auto">
-        <table class="table" role="table">
-          <thead><tr><th>Plataforma</th><th style="text-align:center">1 Mês</th><th style="text-align:center">2 Meses</th><th style="text-align:center">3 Meses</th></tr></thead>
-          <tbody>
-            <tr><td class="bold">Spotify</td>
-              <td style="text-align:center">170 MT<br><button class="btn" onclick="openPay('Spotify','1 mês',170)">Pagar</button></td>
-              <td style="text-align:center">310 MT<br><button class="btn" onclick="openPay('Spotify','2 meses',310)">Pagar</button></td>
-              <td style="text-align:center">440 MT<br><button class="btn" onclick="openPay('Spotify','3 meses',440)">Pagar</button></td></tr>
-
-            <tr style="background:#fafafa"><td class="bold">Prime Video</td>
-              <td style="text-align:center">250 MT<br><button class="btn" onclick="openPay('Prime Video','1 mês',250)">Pagar</button></td>
-              <td style="text-align:center">450 MT<br><button class="btn" onclick="openPay('Prime Video','2 meses',450)">Pagar</button></td>
-              <td style="text-align:center">650 MT<br><button class="btn" onclick="openPay('Prime Video','3 meses',650)">Pagar</button></td></tr>
-
-            <tr><td class="bold">Netflix</td>
-              <td style="text-align:center">270 MT<br><button class="btn" onclick="openPay('Netflix','1 mês',270)">Pagar</button></td>
-              <td style="text-align:center">500 MT<br><button class="btn" onclick="openPay('Netflix','2 meses',500)">Pagar</button></td>
-              <td style="text-align:center">725 MT<br><button class="btn" onclick="openPay('Netflix','3 meses',725)">Pagar</button></td></tr>
-
-            <tr style="background:#fafafa"><td class="bold">Crunchyroll</td>
-              <td style="text-align:center">360 MT<br><button class="btn" onclick="openPay('Crunchyroll','1 mês',360)">Pagar</button></td>
-              <td style="text-align:center">645 MT<br><button class="btn" onclick="openPay('Crunchyroll','2 meses',645)">Pagar</button></td>
-              <td style="text-align:center">930 MT<br><button class="btn" onclick="openPay('Crunchyroll','3 meses',930)">Pagar</button></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- CONTACT BUTTON -->
-    <section style="margin-top:14px;text-align:center">
-      <button class="btn" onclick="openWhatsAppDirect()" style="padding:12px 18px">Fale Conosco no WhatsApp</button>
-    </section>
-
-    <footer>© P&amp;M Digital — Pagamento e-Mola: <strong>867837056</strong> — WhatsApp: <strong>821005252</strong></footer>
-  </div>
-
-  <!-- PAY modal -->
-  <div id="payModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.25);align-items:center;justify-content:center;z-index:90">
-    <div style="background:#fff;padding:16px;border-radius:10px;max-width:520px;margin:auto;color:#111;box-shadow:0 10px 40px rgba(0,0,0,0.12)">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <div class="bold" id="payTitle">Confirmar pagamento</div>
-        <button style="background:none;border:0;cursor:pointer;font-size:18px" onclick="closePay()">✕</button>
-      </div>
-      <div id="payDesc" class="muted" style="margin-top:8px"></div>
-      <label class="muted" style="display:block;margin-top:12px">Seu nome</label>
-      <input id="buyerName" type="text" placeholder="Ex: Ana Silva" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);margin-top:8px">
-      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px">
-        <button class="outline" onclick="closePay()">Cancelar</button>
-        <button class="btn" onclick="confirmPay()">Abrir WhatsApp</button>
-      </div>
-      <div class="muted" style="margin-top:10px">A mensagem incluirá seu nome, um ID de pedido e o número e-Mola <strong>867837056</strong>. Envie comprovante no WhatsApp.</div>
-    </div>
-  </div>
-
-  <!-- INFO modal -->
-  <div id="infoModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.25);align-items:center;justify-content:center;z-index:90">
-    <div style="background:#fff;padding:14px;border-radius:10px;max-width:520px;margin:auto;color:#111;box-shadow:0 10px 40px rgba(0,0,0,0.12)">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <div class="bold" id="infoTitle">Plataformas</div>
-        <button style="background:none;border:0;cursor:pointer;font-size:18px" onclick="closeInfo()">✕</button>
-      </div>
-      <div id="infoBody" style="margin-top:12px;white-space:pre-wrap;color:var(--muted)"></div>
-      <div style="display:flex;justify-content:flex-end;margin-top:12px"><button class="outline" onclick="closeInfo()">Fechar</button></div>
-    </div>
-  </div>
-
-<script>
+</style> 
+ </head> 
+ <body> 
+  <div class="wrap"> 
+   <header> 
+    <div class="top"> 
+     <div> 
+      <h1>P&amp;M DIGITAL</h1> 
+      <div class="lead">
+        Seu passaporte para o melhor do streaming 
+      </div> 
+     </div> 
+     <div style="text-align:right"> 
+      <div class="muted">
+        Pagamento (e-Mola): <span class="bold">867837056</span> 
+      </div> 
+      <div class="muted">
+        WhatsApp: <span class="bold">821005252</span> 
+      </div> 
+     </div> 
+    </div> 
+   </header> <!-- SLIDER --> 
+   <section class="card" aria-label="Destaques"> 
+    <div style="display:flex;justify-content:space-between;align-items:center"> 
+     <div class="bold">
+       Destaques 
+     </div> 
+     <div class="hint">
+       Imagens reais. Clique em Ver plataformas ou Assinar. 
+     </div> 
+    </div> 
+    <div class="slider" id="slider" aria-hidden="false"> 
+     <div class="slides" id="slides"></div> 
+    </div> 
+    <div class="controls" id="dotsWrap" aria-hidden="false" style="margin-top:12px"></div> 
+    <div style="display:flex;justify-content:center;gap:8px;margin-top:10px"> <button class="arrow" onclick="prevSlide()">◀</button> <button class="arrow" onclick="nextSlide()">▶</button> 
+    </div> 
+   </section> <!-- QUIZ --> 
+   <section class="card quiz-card" style="margin-top:14px"> 
+    <div style="display:flex;justify-content:space-between;align-items:center"> 
+     <div class="bold">
+       Quiz Interactivo — 6 perguntas 
+     </div> 
+     <div class="hint">
+       Responda e veja a plataforma ideal 
+     </div> 
+    </div> 
+    <div id="quizArea" style="margin-top:12px"></div> 
+    <div id="quizResult" style="margin-top:12px"></div> 
+   </section> <!-- TABLE --> 
+   <section class="card" style="margin-top:14px"> 
+    <div class="bold">
+      Planos &amp; Preços 
+    </div> 
+    <div class="hint" style="margin-top:8px">
+      Escolha e clique em <strong>Pagar</strong>. Escreva seu nome e confirme — abriremos o WhatsApp. 
+    </div> 
+    <div style="margin-top:12px;overflow:auto"> 
+     <table class="table" role="table"> 
+      <thead> 
+       <tr> 
+        <th>Plataforma</th> 
+        <th style="text-align:center">1 Mês</th> 
+        <th style="text-align:center">2 Meses</th> 
+        <th style="text-align:center">3 Meses</th> 
+       </tr> 
+      </thead> 
+      <tbody> 
+       <tr> 
+        <td class="bold">Spotify</td> 
+        <td style="text-align:center">170 MT<br><button class="btn" onclick="openPay('Spotify','1 mês',170)">Pagar</button></td> 
+        <td style="text-align:center">310 MT<br><button class="btn" onclick="openPay('Spotify','2 meses',310)">Pagar</button></td> 
+        <td style="text-align:center">440 MT<br><button class="btn" onclick="openPay('Spotify','3 meses',440)">Pagar</button></td> 
+       </tr> 
+       <tr style="background:#fafafa"> 
+        <td class="bold">Prime Video</td> 
+        <td style="text-align:center">250 MT<br><button class="btn" onclick="openPay('Prime Video','1 mês',250)">Pagar</button></td> 
+        <td style="text-align:center">450 MT<br><button class="btn" onclick="openPay('Prime Video','2 meses',450)">Pagar</button></td> 
+        <td style="text-align:center">650 MT<br><button class="btn" onclick="openPay('Prime Video','3 meses',650)">Pagar</button></td> 
+       </tr> 
+       <tr> 
+        <td class="bold">Netflix</td> 
+        <td style="text-align:center">270 MT<br><button class="btn" onclick="openPay('Netflix','1 mês',270)">Pagar</button></td> 
+        <td style="text-align:center">500 MT<br><button class="btn" onclick="openPay('Netflix','2 meses',500)">Pagar</button></td> 
+        <td style="text-align:center">725 MT<br><button class="btn" onclick="openPay('Netflix','3 meses',725)">Pagar</button></td> 
+       </tr> 
+       <tr style="background:#fafafa"> 
+        <td class="bold">Crunchyroll</td> 
+        <td style="text-align:center">360 MT<br><button class="btn" onclick="openPay('Crunchyroll','1 mês',360)">Pagar</button></td> 
+        <td style="text-align:center">645 MT<br><button class="btn" onclick="openPay('Crunchyroll','2 meses',645)">Pagar</button></td> 
+        <td style="text-align:center">930 MT<br><button class="btn" onclick="openPay('Crunchyroll','3 meses',930)">Pagar</button></td> 
+       </tr> 
+      </tbody> 
+     </table> 
+    </div> 
+   </section> <!-- CONTACT BUTTON --> 
+   <section style="margin-top:14px;text-align:center"> <button class="btn" onclick="openWhatsAppDirect()" style="padding:12px 18px">Fale Conosco no WhatsApp</button> 
+   </section> 
+   <footer>
+     © P&amp;M Digital — Pagamento e-Mola: <strong>867837056</strong> — WhatsApp: <strong>821005252</strong> 
+   </footer> 
+  </div> <!-- PAY modal --> 
+  <div id="payModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.25);align-items:center;justify-content:center;z-index:90"> 
+   <div style="background:#fff;padding:16px;border-radius:10px;max-width:520px;margin:auto;color:#111;box-shadow:0 10px 40px rgba(0,0,0,0.12)"> 
+    <div style="display:flex;justify-content:space-between;align-items:center"> 
+     <div class="bold" id="payTitle">
+       Confirmar pagamento 
+     </div> <button style="background:none;border:0;cursor:pointer;font-size:18px" onclick="closePay()">✕</button> 
+    </div> 
+    <div id="payDesc" class="muted" style="margin-top:8px"></div> <label class="muted" style="display:block;margin-top:12px">Seu nome</label> 
+    <input id="buyerName" type="text" placeholder="Ex: Ana Silva" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);margin-top:8px"> 
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px"> <button class="outline" onclick="closePay()">Cancelar</button> <button class="btn" onclick="confirmPay()">Abrir WhatsApp</button> 
+    </div> 
+    <div class="muted" style="margin-top:10px">
+      A mensagem incluirá seu nome, um ID de pedido e o número e-Mola <strong>867837056</strong>. Envie comprovante no WhatsApp. 
+    </div> 
+   </div> 
+  </div> <!-- INFO modal --> 
+  <div id="infoModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.25);align-items:center;justify-content:center;z-index:90"> 
+   <div style="background:#fff;padding:14px;border-radius:10px;max-width:520px;margin:auto;color:#111;box-shadow:0 10px 40px rgba(0,0,0,0.12)"> 
+    <div style="display:flex;justify-content:space-between;align-items:center"> 
+     <div class="bold" id="infoTitle">
+       Plataformas 
+     </div> <button style="background:none;border:0;cursor:pointer;font-size:18px" onclick="closeInfo()">✕</button> 
+    </div> 
+    <div id="infoBody" style="margin-top:12px;white-space:pre-wrap;color:var(--muted)"></div> 
+    <div style="display:flex;justify-content:flex-end;margin-top:12px"> <button class="outline" onclick="closeInfo()">Fechar</button> 
+    </div> 
+   </div> 
+  </div> 
+  <script>
 /* CONFIG */
 const WA_NUMBER = '258821005252'; // sem +
 const EMOLA_ACCOUNT = '867837056';
 
-/* Featured posters (public fallback URLs) */
+/* Featured posters (filmes no slide) */
 const featured = [
-  { title:'Nossa Culpa', platform:'Netflix', tag:'Fama', img:'https://i.imgur.com/5Y2q1Qn.jpg' },
-  { title:'The Boys', platform:'Prime Video', tag:'Hit', img:'https://i.imgur.com/9Vq3kq0.jpg' },
-  { title:'Baki Hanma', platform:'Crunchyroll', tag:'Anime', img:'https://i.imgur.com/7y6GQ2K.jpg' },
-  { title:'My Name', platform:'Netflix', tag:'Fama', img:'https://i.imgur.com/1g9dM0t.jpg' },
-  { title:'Lupin', platform:'Netflix', tag:'Crime', img:'https://i.imgur.com/3Z0sKQJ.jpg' },
-  { title:'One Piece', platform:'Netflix', tag:'Anime', img:'https://i.imgur.com/8zXb0kG.jpg' }
+  { title:'Sua Culpa', platform:'Netflix', tag:'Romance', img:'imagens/suaculpa.jpg' },
+  { title:'The Boys 2', platform:'Prime Video', tag:'Ação', img:'imagens/theboys2.jpg' },
+  { title:'One Piece', platform:'Netflix', tag:'Anime', img:'imagens/onepiece.jpg' },
+  { title:'Demon Slayer', platform:'Crunchyroll', tag:'Anime', img:'imagens/demonslayer.jpg' },
+  { title:'365 Dias', platform:'Netflix', tag:'Drama', img:'imagens/365dias.jpg' }
 ];
 
 /* Build slides */
@@ -338,6 +349,38 @@ function closeInfo(){ document.getElementById('infoModal').style.display = 'none
 
 /* helpers */
 function escapeId(s){ return (s||'').replace(/\s+/g,'-').replace(/[^a-zA-Z0-9-_]/g,''); }
-</script>
-
-</body></html>
+</script> 
+ 
+<script type="text/javascript" id="dcoder_script">/* Featured posters (filmes no slide) */
+const featured = [
+  {
+    title: 'Sua Culpa',
+    platform: 'Netflix',
+    tag: 'Romance',
+    img: 'https://i.imgur.com/wJ4Jv7q.jpeg'
+  },
+  {
+    title: 'The Boys 2',
+    platform: 'Prime Video',
+    tag: 'Ação',
+    img: 'https://i.imgur.com/XbODdVm.jpeg'
+  },
+  {
+    title: 'One Piece',
+    platform: 'Netflix',
+    tag: 'Anime',
+    img: 'https://i.imgur.com/qwaFvPy.jpeg'
+  },
+  {
+    title: 'Demon Slayer',
+    platform: 'Crunchyroll',
+    tag: 'Anime',
+    img: 'https://i.imgur.com/XBTQxq2.jpeg'
+  },
+  {
+    title: '365 Dias',
+    platform: 'Netflix',
+    tag: 'Drama',
+    img: 'https://i.imgur.com/l5o0Lpz.jpeg'
+  }
+];</script></body></html>
