@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>P&M Digital — Passaporte Streaming</title>
+
+<!-- Tailwind via CDN para facilitar estilo (opcional) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Fuse.js para busca tolerante a erros -->
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.basic.min.js"></script>
+
+<style>
+  /* Ajustes extras */
+  body { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; background: #fff7f7; }
+  .accent { color: #d31b20; } /* vermelho principal */
+  .bg-accent { background: linear-gradient(90deg,#c81a1f,#e0413d); }
+  .card { border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.06); background: #fff; }
+  .film-img { height:140px; object-fit:cover; border-radius:8px; }
+  .bold { font-weight:700; }
+  .small-muted { color:#6b7280; font-size:13px; }
+  /* modal */
+  .modal-bg { background: rgba(0,0,0,0.5); position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:50; }
+</style>
+</head>
+<body class="text-gray-900">
+
+<!-- Header -->
+<header class="bg-accent text-white py-6">
+  <div class="max-w-6xl mx-auto px-4 flex items-center justify-between">
+    <div>
+      <div class="bold text-2xl">P&amp;M DIGITAL</div>
+      <div class="text-sm opacity-90">Seu passaporte para o melhor do streaming</div>
+    </div>
+    <div class="text-right">
+      <div class="small-muted">Conta e-Mola: <span class="bold">867837056</span></div>
+      <div class="small-muted">WhatsApp: <span class="bold">821005252</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 py-8">
+
+  <!-- Hero com imagem/carrossel simples -->
+  <section class="grid md:grid-cols-3 gap-6 mb-6">
+    <div class="md:col-span-2 card p-6">
+      <h1 class="text-2xl bold mb-2">Seu passaporte para o melhor do streaming</h1>
+      <p class="small-muted mb-4">Assine já e tenha acesso rápido às plataformas. Procure filmes com nossa IA e descubra onde assistir.</p>
+
+      <!-- Busca "IA" -->
+      <div class="flex gap-3">
+        <input id="searchInput" placeholder="Procure um filme ou série (ex: Parasita)" class="w-full border rounded p-3" />
+        <button onclick="onSearch()" class="bg-[#d31b20] text-white px-4 py-2 rounded bold">Procurar</button>
+      </div>
+
+      <div id="searchResults" class="mt-4"></div>
+    </div>
+
+    <aside class="card p-4">
+      <div class="bold mb-2">Títulos em destaque</div>
+      <div class="grid gap-3">
+        <div class="flex gap-3 items-center">
+          <img src="https://picsum.photos/seed/1/120/80" class="film-img" alt="">
+          <div>
+            <div class="bold">Stranger Things</div>
+            <div class="small-muted">Netflix</div>
+          </div>
+        </div>
+        <div class="flex gap-3 items-center">
+          <img src="https://picsum.photos/seed/2/120/80" class="film-img" alt="">
+          <div>
+            <div class="bold">Parasita</div>
+            <div class="small-muted">Netflix</div>
+          </div>
+        </div>
+        <div class="flex gap-3 items-center">
+          <img src="https://picsum.photos/seed/3/120/80" class="film-img" alt="">
+          <div>
+            <div class="bold">Inception</div>
+            <div class="small-muted">Prime Video</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <!-- Fotos de filmes passados (galeria simples) -->
+  <section class="card p-4 mb-6">
+    <div class="bold text-lg mb-3">Fotos / Destaques</div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <!-- placeholder images -->
+      <img src="https://picsum.photos/seed/a/400/240" class="w-full rounded film-img" alt="">
+      <img src="https://picsum.photos/seed/b/400/240" class="w-full rounded film-img" alt="">
+      <img src="https://picsum.photos/seed/c/400/240" class="w-full rounded film-img" alt="">
+      <img src="https://picsum.photos/seed/d/400/240" class="w-full rounded film-img" alt="">
+    </div>
+  </section>
+
+  <!-- Quiz em 5 perguntas -->
+  <section class="card p-4 mb-6">
+    <div class="flex items-center justify-between">
+      <div class="bold text-lg">Quiz (5 perguntas)</div>
+      <div class="small-muted">Rápido — descubra opções</div>
+    </div>
+
+    <div id="quizBox" class="mt-4">
+      <div id="quizQuestion" class="mb-4"></div>
+      <div id="quizChoices" class="grid gap-3"></div>
+
+      <div class="mt-4 flex justify-between items-center">
+        <button id="prevQ" onclick="prevQuestion()" class="px-3 py-2 rounded border">Voltar</button>
+        <div class="small-muted">Pergunta <span id="qIndex">1</span>/5</div>
+        <button id="nextQ" onclick="nextQuestion()" class="px-3 py-2 rounded bg-[#d31b20] text-white bold">Próxima</button>
+      </div>
+    </div>
+
+    <div id="quizResult" class="mt-4" style="display:none"></div>
+  </section>
+
+  <!-- Tabela de preços (igual à imagem) -->
+  <section class="card p-4 mb-6">
+    <div class="bold text-lg mb-3">Planos e Preços</div>
+    <div class="small-muted mb-3">Escolha a plataforma e duração. Clique em <span class="bold">Pagar</span> e confirme o seu nome.</div>
+
+    <div class="overflow-x-auto">
+      <table class="min-w-full w-full">
+        <thead>
+          <tr class="bg-[#d31b20] text-white">
+            <th class="p-3 text-left">Plataforma</th>
+            <th class="p-3 text-center">1 Mês</th>
+            <th class="p-3 text-center">2 Meses</th>
+            <th class="p-3 text-center">3 Meses</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Spotify -->
+          <tr class="border-b">
+            <td class="p-3 bold">Spotify</td>
+            <td class="p-3 text-center">170 MT<br><button class="mt-2 bg-[#d31b20] text-white px-3 py-1 rounded" onclick="openPay('Spotify','1 mês',170)">Pagar</button></td>
+            <td class="p-3 text-center">310 MT<br><button class="mt-2 bg-[#d31b20] text-white px-3 py-1 rounded" onclick="openPay('Spotify','2 meses',310)">Pagar</button></td>
+            <td class="p-3 text-center">440 MT<br><button class="mt-2 bg-[#d31b20] text-white px-3 py-1 rounded" onclick="openPay('Spotify','3 meses',440)">Pagar</button></td>
+          </tr>
+          <!-- Prime Video -->
+          <tr class="border-b bg-gray-50">
+            <td class="p-3 bold">Prime Video</td>
+            <td class="p-3 text-center">250 MT<br><button class="mt-2 bg-[#d31b20] text-white px-3 py-1 rounded" onclick="openPay('Prime Video','1 mês',250)">Pagar</button></td>
+            <td class="p-3 text-center">450 MT<br><button class="mt-2 bg-[#d31b20] text-white px-3 py-1 rounded" onclick="openPay('Prime Video','2 meses',450)">Pagar</button></td>
+            <td class="p-3 text-center">650 MT<br><button class="mt-2 bg-[#d31b20] text-white px-3 py-1 rounded" onclick="openPay('Prime Video','3 meses',650)">Pagar</button></td>
+          </tr>
+          <!-- Netflix -->
+          <tr class="border-b">
+            <td class="p-3 bold">Netflix</td>
+            <td class="p-3 text-center">270 MT<br><button class="mt-2 bg-[#d31b20] text-white px-3 py-1 rounded" onclick="openPay('Netflix','1 mês',270)">Pagar</button></td>
+            <td class="p-3 text-center">500 MT<br><button class="mt-2 bg-[#d31b20] text-white px-3 py-1 rounded" onclick="openPay('Netflix','2 meses',500)">Pagar</button></td>
+            <td class="p-3 text-center">725 MT<br><button class="mt-2 bg-[#d31b20] text-white px-3 py-1 rounded" onclick="openPay('Netflix','3 meses',725)">Pagar</button></td>
+          </tr>
+          <!-- Crunchyroll -->
+          <tr class="border-b bg-gray-50">
+            <td class="p-3 bold">Crunchyroll</td>
+            <td class="p-3 text-center">360 MT<br><button class="mt-2 bg-[#d31b20] text-white px-3 py-1 rounded" onclick="openPay('Crunchyroll','1 mês',360)">Pagar</button></td>
+            <td class="p-3 text-center">645 MT<br><button class="mt-2 bg-[#d31b20] text-white px-3 py-1 rounded" onclick="openPay('Crunchyroll','2 meses',645)">Pagar</button></td>
+            <td class="p-3 text-center">930 MT<br><button class="mt-2 bg-[#d31b20] text-white px-3 py-1 rounded" onclick="openPay('Crunchyroll','3 meses',930)">Pagar</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Como funciona (passos) -->
+  <section class="card p-4 mb-6">
+    <div class="bold mb-2">Como funciona</div>
+    <ol class="small-muted list-decimal pl-5">
+      <li>Procure um título ou faça o quiz para receber sugestão.</li>
+      <li>Escolha o plano e clique <strong>Pagar</strong>.</li>
+      <li>Confirme o seu nome — abrirá o WhatsApp com a mensagem pronta para enviar.</li>
+      <li>Envie comprovativo no WhatsApp (821005252) — ativamos o acesso.</li>
+    </ol>
+  </section>
+
+  <footer class="text-center small-muted mb-8">© P&amp;M Digital — Conta e-Mola: <strong>867837056</strong> — WhatsApp: <strong>821005252</strong></footer>
+</main>
+
+<!-- Modal de pagamento -->
+<div id="payModal" class="modal-bg" style="display:none">
+  <div class="bg-white rounded p-6 w-full max-w-sm">
+    <div class="flex justify-between items-center mb-2">
+      <div class="bold" id="payTitle">Confirmar pagamento</div>
+      <button onclick="closePayModal()" class="text-gray-500">✕</button>
+    </div>
+    <div id="paySummary" class="small-muted mb-4"></div>
+
+    <label class="small-muted">Seu nome (aparecerá na mensagem)</label>
+    <input id="buyerName" class="w-full border rounded p-2 mb-3" placeholder="Ex: João Silva" />
+
+    <div class="flex justify-end gap-3">
+      <button onclick="closePayModal()" class="px-3 py-2 border rounded">Cancelar</button>
+      <button onclick="confirmPayment()" class="px-3 py-2 bg-[#d31b20] text-white rounded bold">Confirmar e abrir WhatsApp</button>
+    </div>
+    <div id="payNote" class="small-muted mt-3">Conta e-Mola: <strong>867837056</strong></div>
+  </div>
+</div>
+
+<!-- Script: catálogo, IA local (fuse), quiz e pagamento -->
+<script>
+  /********** Catalogo (ampliável) **********/
+  const CATALOG = [
+    { title: 'Parasita', platform:'Netflix' },
+    { title: 'O Poderoso Chefão', platform:'Netflix' },
+    { title: 'Stranger Things', platform:'Netflix' },
+    { title: 'Inception', platform:'Prime Video' },
+    { title: 'Your Name', platform:'Crunchyroll' },
+    { title: 'The Marvels', platform:'Prime Video' },
+    { title: 'The Last of Us', platform:'HBO' },
+    { title: 'Interstellar', platform:'Prime Video' },
+    { title: 'Friends', platform:'HBO' },
+    { title: 'Avatar', platform:'Disney+' },
+    { title: 'Avengers: Endgame', platform:'Disney+' },
+    { title: 'Titanic', platform:'Paramount+' },
+    { title: 'Pulp Fiction', platform:'Netflix' },
+    { title: 'Spirited Away', platform:'Crunchyroll' },
+    { title: 'The Dark Knight', platform:'Prime Video' },
+  ];
+
+  // Fuse.js para busca tolerante
+  const fuse = new Fuse(CATALOG, { keys:['title'], threshold:0.35 });
+
+  function onSearch(){
+    const q = document.getElementById('searchInput').value.trim();
+    const out = document.getElementById('searchResults');
+    out.innerHTML = '';
+    if(!q) { out.innerHTML = '<div class="small-muted">Digite um título acima</div>'; return; }
+    // busca direta
+    const direct = CATALOG.filter(c => c.title.toLowerCase() === q.toLowerCase());
+    let results = direct;
+    if(results.length === 0){
+      const f = fuse.search(q);
+      results = f.map(r=>r.item);
+    }
+    if(results.length === 0){
+      out.innerHTML = `<div class="small-muted">Nenhum resultado encontrado. Tente outra grafia.</div>`;
+      return;
+    }
+    // mostrar resultados e indicação de plataforma
+    out.innerHTML = results.slice(0,8).map(r => `
+      <div class="p-3 border rounded mb-2 flex items-center justify-between">
+        <div>
+          <div class="bold">${r.title}</div>
+          <div class="small-muted">Disponível em: <span class="accent bold">${r.platform}</span></div>
+        </div>
+        <div>
+          <button class="px-3 py-1 bg-[#d31b20] text-white rounded" onclick="openPay('${r.platform}','1 mês', getDefaultPrice('${r.platform}'))">Assinar</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function getDefaultPrice(platform){
+    // preços por plataforma (usar a tabela como base)
+    const prices = { 'Spotify':170, 'Prime Video':250, 'Netflix':270, 'Crunchyroll':360, 'Disney+':300, 'HBO':280, 'Paramount+':260 };
+    return prices[platform] || 300;
+  }
+
+  /********** Quiz (5 perguntas) **********/
+  const QUIZ = [
+    { q: 'Que gênero você prefere?', a:['Ação','Comédia','Drama','Animação','Documentário'] },
+    { q: 'Prefere legendado ou dublado?', a:['Legendado','Dublado','Indiferente'] },
+    { q: 'Quanto tempo tem para ver por sessão?', a:['Curto (<1h)','Médio (1-2h)','Longo (>2h)'] },
+    { q: 'Prefere novidades ou clássicos?', a:['Novidades','Clássicos','Ambos'] },
+    { q: 'Assistir sozinho ou com família?', a:['Sozinho','Com amigos','Com família'] },
+  ];
+  let qi = 0;
+  const answers = [];
+
+  function renderQuiz(){
+    document.getElementById('qIndex').innerText = qi+1;
+    const qObj = QUIZ[qi];
+    document.getElementById('quizQuestion').innerHTML = `<div class="bold">${qObj.q}</div>`;
+    document.getElementById('quizChoices').innerHTML = qObj.a.map(opt => `<button class="p-2 border rounded text-left" onclick="selectAnswer('${opt}')">${opt}</button>`).join('');
+    // prev/next buttons state
+    document.getElementById('prevQ').disabled = qi === 0;
+    document.getElementById('nextQ').innerText = qi === QUIZ.length-1 ? 'Finalizar' : 'Próxima';
+  }
+  function selectAnswer(opt){
+    answers[qi] = opt;
+    // highlight selected
+    const buttons = document.querySelectorAll('#quizChoices button');
+    buttons.forEach(b => b.style.background = (b.innerText === opt) ? '#fde8e8' : '#fff');
+  }
+  function prevQuestion(){
+    if(qi > 0) { qi--; renderQuiz(); }
+  }
+  function nextQuestion(){
+    if(!answers[qi]) { alert('Por favor escolha uma opção'); return; }
+    if(qi < QUIZ.length-1){ qi++; renderQuiz(); }
+    else { showQuizResult(); }
+  }
+  function showQuizResult(){
+    document.getElementById('quizResult').style.display = 'block';
+    // lógica simples de recomendação: se escolheu Ação => Netflix/Prime; Animação => Crunchyroll/Disney+
+    const genre = answers[0];
+    let recPlatform = 'Netflix';
+    if(genre === 'Ação') recPlatform = 'Prime Video';
+    if(genre === 'Animação') recPlatform = 'Crunchyroll';
+    if(genre === 'Documentário') recPlatform = 'Prime Video';
+    if(genre === 'Comédia') recPlatform = 'Netflix';
+
+    const suggestedPlan = (recPlatform === 'Crunchyroll') ? 'Plano 3 Meses' : 'Plano 2 Meses';
+    document.getElementById('quizResult').innerHTML = `
+      <div class="bold">Sugerimos: ${recPlatform} — ${suggestedPlan}</div>
+      <div class="small-muted mt-2">Baseado nas suas respostas: <em>${answers.join(', ')}</em></div>
+      <div class="mt-3"><button class="px-3 py-2 bg-[#d31b20] text-white rounded" onclick="openPay(recPlatform,'2 meses', getDefaultPrice(recPlatform))">Assinar ${recPlatform}</button></div>
+    `;
+  }
+
+  // inicializar quiz
+  renderQuiz();
+
+  /********** Pagamento (abre modal e depois WhatsApp) **********/
+  const WA_NUMBER = '258821005252'; // vendedor sem '+'
+  const EMOLA = '867837056';
+  let currentPayment = null;
+
+  function openPay(platform,duration,price){
+    currentPayment = { platform,duration,price };
+    document.getElementById('payTitle').innerText = `Pagar — ${platform}`;
+    document.getElementById('paySummary').innerText = `${platform} • ${duration} • ${price} MT`;
+    document.getElementById('buyerName').value = '';
+    document.getElementById('payModal').style.display = 'flex';
+  }
+  function closePayModal(){ document.getElementById('payModal').style.display = 'none'; }
+
+  function confirmPayment(){
+    const name = (document.getElementById('buyerName')||{}).value.trim();
+    if(!name){ alert('Por favor escreva o seu nome'); return; }
+    const msg = `Olá! Quero assinar ${currentPayment.platform} — ${currentPayment.duration} — Valor: ${currentPayment.price} MT. Nome: ${name}. Já paguei / pagarei via e-Mola (Conta: ${EMOLA}).`;
+    // abre WhatsApp do vendedor (para o cliente enviar comprovativo)
+    const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+    window.open(url, '_blank');
+    closePayModal();
+  }
+
+  /********** Pequena melhoria: fecha modal com ESC **********/
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape'){ closePayModal(); } });
+
+</script>
+</body>
+</html>
