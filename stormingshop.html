@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>P&amp;M Digital — Streaming Mozambique</title>
+  <style>
+    :root{
+      --red1:#cc0f0f;
+      --red2:#a60b0b;
+      --accent:#ffdd57;
+      --glass: rgba(255,255,255,0.06);
+      --glass-2: rgba(255,255,255,0.04);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+      -webkit-font-smoothing:antialiased;
+      background: linear-gradient(180deg,var(--red1),var(--red2));
+      color:#fff;
+      padding:18px;
+    }
+    .wrap{max-width:980px;margin:0 auto;}
+    header{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:18px 6px}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:62px;height:62px;border-radius:10px;background:linear-gradient(135deg,#fff3,#fff1);display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--red2);font-size:24px}
+    h1{margin:0;font-size:20px;line-height:1}
+    .sub{opacity:.9;font-size:13px;margin-top:6px}
+    .contact{font-weight:700;text-align:right}
+    .hero{display:grid;grid-template-columns:1fr;gap:14px;background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02)); padding:18px;border-radius:14px;box-shadow:0 6px 20px rgba(0,0,0,0.25)}
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap:16px;
+    }
+    @media (max-width:860px){ .grid{grid-template-columns:1fr} .contact{font-size:12px}}
+    /* left panel */
+    .panel{padding:6px}
+    .section-title{font-size:18px;font-weight:800;margin-bottom:8px}
+    .price-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .platform-card{
+      background:var(--glass);
+      padding:12px;border-radius:12px;cursor:pointer;transition:transform .15s, box-shadow .15s;
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .platform-card:hover{transform:translateY(-4px);box-shadow:0 8px 30px rgba(0,0,0,0.35)}
+    .platform-name{font-weight:700}
+    .platform-tag{font-size:12px;opacity:.85}
+    .selected{box-shadow:0 0 0 3px rgba(255,255,255,0.08) inset, 0 10px 30px rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.05)}
+    /* price table */
+    .price-table{margin-top:12px;border-radius:10px;overflow:hidden;background:linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.04))}
+    .price-row{display:flex;align-items:center;gap:12px;padding:12px;border-bottom:1px solid rgba(255,255,255,0.03)}
+    .price-row:last-child{border-bottom:none}
+    .plat-name{flex:1;font-weight:700}
+    .price-cols{display:flex;gap:8px;min-width:300px;justify-content:flex-end}
+    .price-cell{min-width:80px;text-align:right;font-weight:700}
+    .big-cta{display:flex;gap:8px;margin-top:12px;align-items:center}
+    .btn{padding:10px 14px;border-radius:10px;background:rgba(255,255,255,0.08);color:#fff;border:none;cursor:pointer;font-weight:700}
+    .btn:hover{transform:translateY(-3px)}
+    /* right aside */
+    aside{background:var(--glass-2);padding:14px;border-radius:12px}
+    .summary{display:flex;justify-content:space-between;align-items:center}
+    .big-price{font-size:22px;font-weight:900}
+    .mono{font-family:monospace;background:rgba(0,0,0,0.12);padding:6px;border-radius:6px}
+    /* search */
+    .search-box{margin-top:14px;display:flex;gap:8px}
+    .search-box input{flex:1;padding:10px;border-radius:10px;border:none;background:rgba(255,255,255,0.03);color:#fff}
+    .result{margin-top:12px;padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(0,0,0,0.06), rgba(0,0,0,0.03))}
+    .badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .badge{padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.06);font-weight:800;font-size:13px}
+    /* quiz modal */
+    .modal-back{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;padding:18px;z-index:999}
+    .modal{width:100%;max-width:720px;background:linear-gradient(180deg,var(--red1),var(--red2));padding:18px;border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,0.6)}
+    .quiz-card{background:rgba(255,255,255,0.06);padding:12px;border-radius:10px;margin-top:10px}
+    .option{padding:10px;border-radius:8px;margin-top:8px;background:rgba(255,255,255,0.03);cursor:pointer}
+    .option.sel{outline:3px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.06)}
+    /* footer */
+    footer{margin-top:18px;text-align:center;opacity:0.9;font-size:13px}
+    /* small helpers */
+    .muted{opacity:.85;font-size:13px}
+    .small{font-size:12px;opacity:.9}
+    .poster{width:100%;height:140px;border-radius:10px;background:linear-gradient(90deg, rgba(0,0,0,0.2), rgba(0,0,0,0.05));display:flex;align-items:center;justify-content:center;font-weight:800}
+    .cta-whatsapp{background:linear-gradient(90deg,#25d366,#128c7e);color:#033; padding:10px 12px;border-radius:10px;font-weight:900;display:inline-block}
+    .hint{font-size:12px;opacity:.9;margin-top:8px}
+    .tooltip{font-size:12px;background:rgba(0,0,0,0.2);padding:6px;border-radius:8px;display:inline-block}
+    /* subtle animations */
+    .fadein{animation:fadeIn .45s ease both}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">P&amp;M</div>
+        <div>
+          <h1>P&amp;M Digital — Seu passaporte para o melhor do streaming</h1>
+          <div class="sub">Assine já — Pagamento: eMola <span class="mono">867837056</span></div>
+        </div>
+      </div>
+      <div class="contact">
+        <div class="small">Suporte / WhatsApp</div>
+        <div style="font-size:18px;font-weight:900">+258 821 005 252</div>
+      </div>
+    </header>
+
+    <main class="hero">
+      <div class="grid">
+        <!-- LEFT: main panel -->
+        <div class="panel">
+          <div class="section-title">Planos e Preços</div>
+
+          <div class="price-table fadein">
+            <div class="price-row" style="background:linear-gradient(90deg, rgba(0,0,0,0.06), transparent)">
+              <div class="plat-name">Plataforma</div>
+              <div class="price-cols">
+                <div class="price-cell small">1 MÊS</div>
+                <div class="price-cell small">2 MESES</div>
+                <div class="price-cell small">3 MESES</div>
+              </div>
+            </div>
+
+            <div class="price-row">
+              <div class="plat-name">Spotify</div>
+              <div class="price-cols">
+                <div class="price-cell">170 MT</div>
+                <div class="price-cell">310 MT</div>
+                <div class="price-cell">440 MT</div>
+              </div>
+            </div>
+
+            <div class="price-row">
+              <div class="plat-name">Prime Video</div>
+              <div class="price-cols">
+                <div class="price-cell">250 MT</div>
+                <div class="price-cell">450 MT</div>
+                <div class="price-cell">650 MT</div>
+              </div>
+            </div>
+
+            <div class="price-row">
+              <div class="plat-name">Netflix</div>
+              <div class="price-cols">
+                <div class="price-cell">270 MT</div>
+                <div class="price-cell">500 MT</div>
+                <div class="price-cell">725 MT</div>
+              </div>
+            </div>
+
+            <div class="price-row">
+              <div class="plat-name">Crunchyroll</div>
+              <div class="price-cols">
+                <div class="price-cell">360 MT</div>
+                <div class="price-cell">645 MT</div>
+                <div class="price-cell">930 MT</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:12px;margin-top:12px;align-items:center;">
+            <div style="flex:1">
+              <div class="small muted">Escolha a plataforma (toque para selecionar):</div>
+              <div class="price-grid" id="platformList" style="margin-top:8px"></div>
+            </div>
+
+            <div style="width:220px">
+              <div class="small muted">Duração</div>
+              <select id="months" style="width:100%;padding:10px;border-radius:8px;background:rgba(255,255,255,0.03);border:none;color:#fff;margin-top:8px">
+                <option value="1">1 mês</option>
+                <option value="2">2 meses</option>
+                <option value="3">3 meses</option>
+              </select>
+              <div class="hint">Total estimado</div>
+              <div class="big-cta" style="margin-top:8px">
+                <div class="big-price" id="totalPrice">270 MT</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <div class="small muted">Nome do cliente</div>
+            <input id="custName" placeholder="Seu nome" style="width:100%;padding:10px;border-radius:8px;border:none;background:rgba(255,255,255,0.03);color:#fff;margin-top:6px">
+            <div class="small muted" style="margin-top:8px">Telefone (para confirmação)</div>
+            <input id="custPhone" placeholder="Ex: 82x xxx xxx" style="width:100%;padding:10px;border-radius:8px;border:none;background:rgba(255,255,255,0.03);color:#fff;margin-top:6px">
+          </div>
+
+          <div style="margin-top:10px;display:flex;gap:8px">
+            <button class="btn" id="buyBtn">Comprar — Enviar WhatsApp</button>
+            <button class="btn" id="openQuizBtn">Fazer quiz</button>
+          </div>
+
+          <div style="margin-top:12px">
+            <div class="section-title">Procure um filme / série</div>
+            <div class="muted small">Digite o nome de um filme e veja onde ele está disponível</div>
+
+            <div class="search-box" style="margin-top:8px">
+              <input id="searchInput" placeholder="Ex: Parasite, One Piece, Stranger Things...">
+              <button class="btn" id="searchBtn">Pesquisar</button>
+            </div>
+
+            <div id="searchResult" class="result" style="display:none"></div>
+          </div>
+        </div>
+
+        <!-- RIGHT: aside -->
+        <aside>
+          <div class="summary">
+            <div>
+              <div class="small muted">Recomendado</div>
+              <div id="selectedPlatform" style="font-size:20px;font-weight:900">Netflix</div>
+              <div class="small" id="selectedTag">Filmes e Séries</div>
+            </div>
+            <div style="text-align:right">
+              <div class="small muted">Duração</div>
+              <div id="selMonths" style="font-weight:900">1 mês</div>
+              <div style="margin-top:8px" class="mono">Pagamento: eMola 867837056</div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <div class="section-title">Poster / Promo</div>
+            <div class="poster">CineNight · P&amp;M Digital</div>
+            <div class="hint">Poster personalizado enviado após confirmação do pagamento.</div>
+          </div>
+
+          <div style="margin-top:12px">
+            <div class="section-title">Suporte</div>
+            <div class="muted">WhatsApp:<br><span style="font-weight:900">+258 821 005 252</span></div>
+            <div class="hint">Envie comprovativo e ativamos sua conta em até 30 minutos.</div>
+          </div>
+
+          <div style="margin-top:12px">
+            <div class="section-title">Pagamento</div>
+            <div class="muted">Número eMola:</div>
+            <div class="mono">867837056</div>
+            <div class="small hint">Após pagamento, envie comprovante via WhatsApp.</div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- footer small -->
+      <footer>
+        <div class="small">Feito para Moçambique • P&amp;M Digital • Promoções válidas enquanto durar o stock</div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Quiz Modal -->
+  <div id="modal" style="display:none" class="modal-back">
+    <div class="modal">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="font-weight:900;font-size:18px">Quiz rápido — Qual o melhor serviço para você?</div>
+        <button id="closeModal" class="btn">Fechar</button>
+      </div>
+
+      <div class="quiz-card" id="quizCard">
+        <!-- questions will be injected -->
+      </div>
+
+      <div style="margin-top:10px;display:flex;justify-content:flex-end;gap:8px">
+        <button class="btn" id="prevQ">Voltar</button>
+        <button class="btn" id="nextQ">Próxima</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /************* DATA *************/
+    const paymentNumber = "867837056"; // eMola
+    const waNumber = "258821005252"; // +258 821005252
+    const platforms = [
+      { name: "Spotify", tag: "Música e Podcasts", prices: [170,310,440], color:"#1DB954" },
+      { name: "Prime Video", tag: "Filmes e Séries", prices: [250,450,650], color:"#00A8E1" },
+      { name: "Netflix", tag: "Filmes e Séries", prices: [270,500,725], color:"#E50914" },
+      { name: "Crunchyroll", tag: "Animes", prices: [360,645,930], color:"#F76C22" }
+    ];
+
+    // Example movie database (simples). Em produção usaria API real.
+    const movieDB = [
+      { title:"parasite", platforms:["Netflix"] },
+      { title:"stranger things", platforms:["Netflix"] },
+      { title:"one piece", platforms:["Crunchyroll","Netflix"] },
+      { title:"the batman", platforms:["Prime Video","Netflix"] },
+      { title:"the boys", platforms:["Prime Video"] },
+      { title:"your name", platforms:["Crunchyroll","Netflix"] },
+      { title:"hotel california live", platforms:["Spotify"] },
+      { title:"john wick", platforms:["Prime Video","Netflix"] },
+      { title:"attack on titan", platforms:["Crunchyroll"] },
+      { title:"vikings", platforms:["Prime Video"] },
+      { title:"bohemian rhapsody", platforms:["Spotify","Netflix"] }
+    ];
+
+    /************* UI SETUP *************/
+    const platformList = document.getElementById('platformList');
+    const monthsSel = document.getElementById('months');
+    const totalPriceEl = document.getElementById('totalPrice');
+    const selectedPlatformEl = document.getElementById('selectedPlatform');
+    const selectedTagEl = document.getElementById('selectedTag');
+    const selMonthsEl = document.getElementById('selMonths');
+
+    let selectedPlatform = platforms[2]; // default Netflix
+
+    function renderPlatformCards(){
+      platformList.innerHTML = '';
+      platforms.forEach(p => {
+        const btn = document.createElement('div');
+        btn.className = 'platform-card fadein';
+        if(p.name === selectedPlatform.name) btn.classList.add('selected');
+        btn.onclick = () => { selectedPlatform = p; updateSelection(); };
+        btn.innerHTML = `
+          <div>
+            <div class="platform-name">${p.name}</div>
+            <div class="platform-tag">${p.tag}</div>
+          </div>
+          <div style="text-align:right">
+            <div class="small">1m: <strong>${p.prices[0]} MT</strong></div>
+          </div>
+        `;
+        platformList.appendChild(btn);
+      });
+    }
+
+    function updateSelection(){
+      renderPlatformCards();
+      const months = Number(monthsSel.value);
+      totalPriceEl.innerText = selectedPlatform.prices[months-1] + ' MT';
+      selectedPlatformEl.innerText = selectedPlatform.name;
+      selectedTagEl.innerText = selectedPlatform.tag;
+      selMonthsEl.innerText = months + (months>1 ? ' meses':' mês');
+    }
+
+    monthsSel.addEventListener('change', updateSelection);
+
+    renderPlatformCards();
+    updateSelection();
+
+    /************* BUY ACTION *************/
+    document.getElementById('buyBtn').addEventListener('click', () => {
+      const name = document.getElementById('custName').value.trim();
+      const phone = document.getElementById('custPhone').value.trim();
+      const months = Number(monthsSel.value);
+      if(!name || !phone){ alert('Por favor preencha nome e telefone.'); return; }
+      const price = selectedPlatform.prices[months-1];
+      const msg = `Olá! Meu nome é ${name}. Quero o plano ${selectedPlatform.name} — ${months} mês(es). Valor: ${price} MT. Paguei via eMola (número: ${paymentNumber}). Meu telefone: ${phone}.`;
+      const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank');
+    });
+
+    /************* SEARCH MOVIE *************/
+    document.getElementById('searchBtn').addEventListener('click', doSearch);
+    document.getElementById('searchInput').addEventListener('keydown', (e)=>{ if(e.key==='Enter') doSearch(); });
+
+    function doSearch(){
+      const q = document.getElementById('searchInput').value.trim().toLowerCase();
+      const resultBox = document.getElementById('searchResult');
+      resultBox.style.display = 'block';
+      if(!q){ resultBox.innerHTML = '<div class="small">Escreva o nome do filme/série para pesquisar.</div>'; return; }
+      // simple fuzzy: include
+      const matches = movieDB.filter(m => m.title.includes(q));
+      if(matches.length === 0){
+        resultBox.innerHTML = `<div><strong>"${q}"</strong> não encontrado na nossa lista rápida.</div>
+          <div class="hint">Sugestão: experimente variações do título ou peça ao suporte no WhatsApp.</div>
+          <div style="margin-top:8px"><a class="cta-whatsapp" href="https://wa.me/${waNumber}?text=${encodeURIComponent('Olá! Preciso de ajuda para encontrar o filme: '+q)}" target="_blank">Pedir no WhatsApp</a></div>`;
+        return;
+      }
+      // show first match details
+      const first = matches[0];
+      resultBox.innerHTML = `<div><strong>${capitalize(first.title)}</strong></div>
+         <div class="badges">${first.platforms.map(pl => `<span class="badge">${pl}</span>`).join('')}</div>
+         <div class="hint">Plataformas disponíveis para este título.</div>
+         <div style="margin-top:10px">
+           ${first.platforms.map(pl => {
+             // for each platform, show buy button
+             const p = platforms.find(x=>x.name===pl);
+             const btnText = `Assinar ${pl}`;
+             return `<button class="btn" style="margin-top:6px;margin-right:6px" onclick="quickBuy('${pl}')">${btnText}</button>`;
+           }).join('')}
+         </div>`;
+    }
+
+    function quickBuy(plName){
+      // preselect platform and open whatsapp with message template
+      const p = platforms.find(x=>x.name===plName);
+      if(!p) return alert('Plataforma não encontrada.');
+      selectedPlatform = p;
+      updateSelection();
+      // prepare WA link
+      const name = document.getElementById('custName').value.trim() || 'Cliente';
+      const months = Number(monthsSel.value);
+      const price = p.prices[months-1];
+      const msg = `Olá! Meu nome é ${name}. Quero o plano ${p.name} — ${months} mês(es) para ver este título. Valor: ${price} MT. Número de pagamento eMola: ${paymentNumber}.`;
+      window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    /************* QUIZ *************/
+    const quizQuestions = [
+      { q:"Que tipo de conteúdo você prefere?", options:[{id:'a',t:'Músicas e playlists'},{id:'b',t:'Filmes e séries'},{id:'c',t:'Animes e cultura pop'}]},
+      { q:"Você prioriza:", options:[{id:'a',t:'Preço baixo'},{id:'b',t:'Catálogo de lançamentos'},{id:'c',t:'Conteúdo de nicho (anime)'}]},
+      { q:"Durante uma noite livre você prefere:", options:[{id:'a',t:'Ouvir música'},{id:'b',t:'Maratonar séries'},{id:'c',t:'Assistir anime'}]},
+    ];
+    let qIndex = 0;
+    let qAnswers = [];
+
+    const modal = document.getElementById('modal');
+    const quizCard = document.getElementById('quizCard');
+    document.getElementById('openQuizBtn').addEventListener('click', openQuiz);
+    document.getElementById('closeModal').addEventListener('click', closeQuiz);
+    document.getElementById('nextQ').addEventListener('click', nextQuestion);
+    document.getElementById('prevQ').addEventListener('click', prevQuestion);
+
+    function openQuiz(){
+      qIndex=0; qAnswers=[]; renderQuestion();
+      modal.style.display='flex';
+    }
+    function closeQuiz(){ modal.style.display='none'; }
+
+    function renderQuestion(){
+      const Q = quizQuestions[qIndex];
+      quizCard.innerHTML = `<div style="font-weight:800">${Q.q}</div>
+        ${Q.options.map(opt => `<div class="option ${qAnswers[qIndex]===opt.id ? 'sel':''}" data-id="${opt.id}">${opt.t}</div>`).join('')}
+        <div class="small hint" style="margin-top:8px">Pergunta ${qIndex+1} de ${quizQuestions.length}</div>`;
+      // bind options
+      Array.from(quizCard.querySelectorAll('.option')).forEach(el=>{
+        el.onclick = ()=>{
+          qAnswers[qIndex] = el.dataset.id;
+          renderQuestion();
+        }
+      });
+      // update prev/next buttons
+      document.getElementById('prevQ').disabled = qIndex===0;
+      document.getElementById('nextQ').innerText = qIndex < quizQuestions.length-1 ? 'Próxima' : 'Finalizar';
+    }
+
+    function nextQuestion(){
+      if(!qAnswers[qIndex]) return alert('Escolha uma opção antes de continuar.');
+      if(qIndex < quizQuestions.length-1){ qIndex++; renderQuestion(); }
+      else finishQuiz();
+    }
+    function prevQuestion(){ if(qIndex>0){ qIndex--; renderQuestion(); } }
+
+    function finishQuiz(){
+      // score a/b/c
+      const tally = {a:0,b:0,c:0};
+      qAnswers.forEach(x=> tally[x] = (tally[x]||0)+1);
+      let result;
+      if(tally.a >= tally.b && tally.a >= tally.c) result='Spotify';
+      else if(tally.c > tally.b && tally.c > tally.a) result='Crunchyroll';
+      else result='Netflix';
+      selectedPlatform = platforms.find(p=>p.name===result);
+      updateSelection();
+      alert('Resultado do quiz: ' + result + '. Plataforma selecionada no carrinho.');
+      closeQuiz();
+    }
+
+    /************* UTIL *************/
+    function capitalize(s){ return s.replace(/\b\w/g,ch=>ch.toUpperCase()); }
+
+    // small enhancement: pre-fill some sample search when page loads
+    // (comment out if undesired)
+    //document.getElementById('searchInput').value = 'one piece';
+    //doSearch();
+  </script>
+
+</body></html>
